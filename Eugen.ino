@@ -9,6 +9,11 @@ WiFiClient client;
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include "Servo.h"
+Servo myservo;
+int angle  = 0;
+#define SERVO_PIN D7
+
 #define OLED_RESET 0 // "0" for ESP8266
 Adafruit_SSD1306 display(OLED_RESET);
 
@@ -19,6 +24,8 @@ boolean koffeePouring = false;
 void setup()
 {
   Serial.begin(9600);
+  myservo.attach(SERVO_PIN);
+  digitalWrite(SERVO_PIN, LOW);
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Initialize the OLED-Display
   display.display();
@@ -56,7 +63,14 @@ void pourCoffe()
   display.setCursor(0, 0);
   display.println("Kaffee");
   display.display();
-  delay(1000);
+
+  myservo.write(45);
+  delay(500);
+  myservo.write(135);
+  delay(500);
+
+  digitalWrite(SERVO_PIN, LOW);
+
   display.clearDisplay();
   display.setCursor(0, 0);
   display.println("Warte auf Kaffee");
