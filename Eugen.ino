@@ -9,13 +9,12 @@ WiFiClient client;
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#include "Servo.h" // Library to controll the servo
-
 #define OLED_RESET 0 // "0" for ESP8266
 Adafruit_SSD1306 display(OLED_RESET);
 
 char blynkAuth[] = "fW8dET98PxDO2kyxpZqzY03pjkUzjEuc";
 
+boolean koffeePouring = false;
 
 void setup()
 {
@@ -47,7 +46,29 @@ void setup()
 }
 void loop()
 {
-
+  Blynk.run(); // Run the Blynk-Client
 }
 
+void pourCoffe()
+{
+  koffeePouring = true;
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.println("Kaffee");
+  display.display();
+  delay(1000);
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.println("Warte auf Kaffee");
+  display.display();
+  koffeePouring = false;
+}
 
+BLYNK_WRITE(V0)
+{
+  int i = param.asInt();
+  if (i == 0 || koffeePouring)
+    return;
+
+  pourCoffe();
+}
