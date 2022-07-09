@@ -14,7 +14,10 @@ Servo myservo;
 int angle  = 0;
 #define SERVO_PIN D7 // Data pin for the servo
 
-#define BUTTON_PIN D3 // Pin on which to read tha button input
+#define BUTTON_PIN D3 // Pin on which to read the button input
+
+#define BUZZER_PIN D5 // Pinn on which the buzzer reads
+#define c  1915 //Note c
 
 #define OLED_RESET 0 // "0" for ESP8266
 Adafruit_SSD1306 display(OLED_RESET);
@@ -87,6 +90,8 @@ void pourCoffee()
   display.println("Warte auf Kaffee");
   display.display();
   koffeePouring = false;
+
+  playTone()
 }
 
 BLYNK_WRITE(V0)
@@ -95,5 +100,16 @@ BLYNK_WRITE(V0)
   if (i == 0 || koffeePouring)
     return;
 
-  pourCoffee();
+  pourCoffee(c, 500); // Play a tone to indicate that the coffee is poured
+}
+
+//Funktion to play a frequency
+//Expects a frequency (tone) and a duration (duration)
+void playTone(int tone, int duration) {
+  for (long i = 0; i < duration * 1000L; i += tone * 2) {
+    digitalWrite(BUZZER_PIN, HIGH);
+    delayMicroseconds(tone);
+    digitalWrite(BUZZER_PIN, LOW);
+    delayMicroseconds(tone);
+  }
 }
