@@ -10,7 +10,21 @@ char blynkAuth[] = "fW8dET98PxDO2kyxpZqzY03pjkUzjEuc";
 void setup() {
   Serial.begin(9600);
 
-    // Also accessible at IP 192.168.4.1
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);        // Initialize the OLED-Display
+  display.display();
+
+  display.clearDisplay();                           // Display connection status
+  display.setTextColor(WHITE);
+  display.setTextSize(1);
+  display.setCursor(0, 0);
+  display.println("Verbinde");
+  display.println("dich mit");
+  display.println("der SSID ");
+  display.println("Eugen");
+  display.setCursor(0, 0);
+  display.display();
+  
+  // Also accessible at IP 192.168.4.1
   wifiManager.autoConnect("Eugen");      // Setup the name of the hotspot
 
   Blynk.begin(blynkAuth, WiFi.SSID().c_str(), WiFi.psk().c_str(), "iot.informatik.uni-oldenburg.de", 8080);        // Connect to Blynk-Client
