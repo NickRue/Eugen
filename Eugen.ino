@@ -31,6 +31,7 @@ void setup()
   Serial.begin(9600);
   myservo.attach(SERVO_PIN);
   digitalWrite(SERVO_PIN, LOW);
+  pinMode(BUZZER_PIN, OUTPUT);
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Initialize the OLED-Display
   display.display();
