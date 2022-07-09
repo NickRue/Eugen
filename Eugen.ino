@@ -4,6 +4,14 @@
 WiFiManager wifiManager;
 WiFiClient client;
 
+#include <SPI.h>                          // Library to controll the LED-Display
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define OLED_RESET 0                       // "0" for ESP8266
+Adafruit_SSD1306 display(OLED_RESET);
+
 char blynkAuth[] = "fW8dET98PxDO2kyxpZqzY03pjkUzjEuc";
 
 
@@ -26,6 +34,8 @@ void setup() {
   
   // Also accessible at IP 192.168.4.1
   wifiManager.autoConnect("Eugen");      // Setup the name of the hotspot
+
+  
 
   Blynk.begin(blynkAuth, WiFi.SSID().c_str(), WiFi.psk().c_str(), "iot.informatik.uni-oldenburg.de", 8080);        // Connect to Blynk-Client
 
