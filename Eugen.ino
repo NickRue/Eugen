@@ -91,7 +91,8 @@ void pourCoffee()
   display.display();
   koffeePouring = false;
 
-  playTone()
+  playTone(c, 500); // Play a tone to indicate that the coffee is poured
+
 }
 
 BLYNK_WRITE(V0)
@@ -100,7 +101,7 @@ BLYNK_WRITE(V0)
   if (i == 0 || koffeePouring)
     return;
 
-  pourCoffee(c, 500); // Play a tone to indicate that the coffee is poured
+  pourCoffee(); 
 }
 
 //Funktion to play a frequency
