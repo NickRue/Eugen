@@ -51,12 +51,16 @@ void setup()
 
   Blynk.begin(blynkAuth, WiFi.SSID().c_str(), WiFi.psk().c_str(), "iot.informatik.uni-oldenburg.de", 8080); // Connect to Blynk-Client
 }
+
+
 void loop()
 {
   Blynk.run(); // Run the Blynk-Client
+  
+  
 }
 
-void pourCoffe()
+void pourCoffee()
 {
   koffeePouring = true;
   display.clearDisplay();
@@ -84,5 +88,5 @@ BLYNK_WRITE(V0)
   if (i == 0 || koffeePouring)
     return;
 
-  pourCoffe();
+  pourCoffee();
 }
