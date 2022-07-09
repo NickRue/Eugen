@@ -12,7 +12,9 @@ WiFiClient client;
 #include "Servo.h"
 Servo myservo;
 int angle  = 0;
-#define SERVO_PIN D7
+#define SERVO_PIN D7 // Data pin for the servo
+
+#define BUTTON_PIN D3 // Pin on which to read tha button input
 
 #define OLED_RESET 0 // "0" for ESP8266
 Adafruit_SSD1306 display(OLED_RESET);
@@ -57,7 +59,12 @@ void loop()
 {
   Blynk.run(); // Run the Blynk-Client
   
-  
+  int buttonState = digitalRead(BUTTON_PIN); // Read the button
+  if(buttonState == LOW) // Low indicates button push
+  {
+    if(!koffeePouring)
+      pourCoffee();
+  }
 }
 
 void pourCoffee()
