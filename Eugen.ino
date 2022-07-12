@@ -74,19 +74,20 @@ void loop()
 void pourCoffee()
 {
   koffeePouring = true;
-  display.clearDisplay();
+
+  display.clearDisplay(); // Display that a coffee is beeing poured
   display.setCursor(0, 0);
   display.println("Kaffee");
   display.display();
 
-  myservo.write(45);
-  delay(500);
-  myservo.write(135);
-  delay(500);
+  myservo.write(45); //Rotate the servo so that it presses the button on the coffee machine
+  delay(1000);
+  myservo.write(150);
+  delay(1000);
 
   digitalWrite(SERVO_PIN, LOW);
 
-  display.clearDisplay();
+  display.clearDisplay(); //Display that the controlelr is ready to pour another coffee
   display.setCursor(0, 0);
   display.println("Warte auf Kaffee");
   display.display();
