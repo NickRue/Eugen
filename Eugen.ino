@@ -11,13 +11,14 @@ WiFiClient client;
 
 #include "Servo.h"
 Servo myservo;
-int angle  = 0;
+
+#include "pitches.h"
+
 #define SERVO_PIN D7 // Data pin for the servo
 
 #define BUTTON_PIN D3 // Pin on which to read the button input
 
 #define BUZZER_PIN D5 // Pinn on which the buzzer reads
-#define c  1915 //Note c
 
 #define OLED_RESET 0 // "0" for ESP8266
 Adafruit_SSD1306 display(OLED_RESET);
@@ -93,7 +94,7 @@ void pourCoffee()
   display.display();
   koffeePouring = false;
 
-  tone(BUZZER_PIN, c, 500); // Play a tone to indicate that the coffee is poured
+  tone(BUZZER_PIN, NOTE_C4, 500); // Play a tone to indicate that the coffee is poured
 
 }
 
