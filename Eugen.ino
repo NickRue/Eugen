@@ -93,7 +93,7 @@ void pourCoffee()
   display.display();
   koffeePouring = false;
 
-  playTone(c, 500); // Play a tone to indicate that the coffee is poured
+  tone(BUZZER_PIN, c, 500); // Play a tone to indicate that the coffee is poured
 
 }
 
@@ -104,15 +104,4 @@ BLYNK_WRITE(V0)
     return;
 
   pourCoffee(); 
-}
-
-//Funktion to play a frequency
-//Expects a frequency (tone) and a duration (duration)
-void playTone(int tone, int duration) {
-  for (long i = 0; i < duration * 1000L; i += tone * 2) {
-    digitalWrite(BUZZER_PIN, HIGH);
-    delayMicroseconds(tone);
-    digitalWrite(BUZZER_PIN, LOW);
-    delayMicroseconds(tone);
-  }
 }
