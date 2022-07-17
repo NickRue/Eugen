@@ -227,7 +227,8 @@ void pourCoffee()
   display.clearDisplay(); // Display that the controller is ready for the next coffee
   display.setCursor(0, 0);
   display.println("Bereit");
-  display.println("einen Kaffee");
+  display.println("einen");
+  display.println("Kaffee");
   display.println("zu machen");
   display.display();
 
