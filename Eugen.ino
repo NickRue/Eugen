@@ -156,6 +156,7 @@ void setup()
     delay(5000);
     ESP.restart(); // Restart the program, if the connection could not be established
   }
+  delay(2000);
 
   display.clearDisplay(); // Display connection status
   display.setCursor(0, 0);
@@ -192,6 +193,8 @@ void loop()
       display.clearDisplay(); // Display connection status
       display.println("Verbindung");
       display.println("geloescht");
+      display.println("Geraet wird"); // Display message about restarting the device
+      display.println("neugestartet");
       display.display();
       delay(5000);
       ESP.restart();
