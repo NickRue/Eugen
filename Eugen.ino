@@ -244,7 +244,8 @@ BLYNK_WRITE(V1) // Toogle calibration mode
     Blynk.setProperty(V3, "offLabel", "Accept Start Angle"); // Set the off label of the button to "Accept Start Angle"
     display.clearDisplay();
     display.setCursor(0, 0);
-    display.println("Kalibrierung"); // Display message about calibration mode
+    display.println("Kalibrie-"); // Display message about calibration mode
+    display.println("rung");
     display.display();
   }
   else
