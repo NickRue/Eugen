@@ -14,7 +14,8 @@ Servo myservo;     // Create a servo object
 
 #include "pitches.h" // Library contains pitches for notes
 
-#include <FS.h> // Library to use the filesystem
+#include "FileSystemUtilities.h" // Contains methods to use the filesystem
+FileSystemUtilities utilities; // Create a filesystem utilities object
 
 #define SERVO_PIN D7 // Data pin for the servo
 
@@ -32,46 +33,6 @@ Adafruit_SSD1306 display(OLED_RESET);
 
 boolean koffeePouring = false;
 
-String readFile(fs::FS &fs, const char *path) // read the content of a file
-{
-  Serial.printf("Reading file: %s\r\n", path); // Debug message
-  File file = fs.open(path, "r");              // Open the file
-  if (!file || file.isDirectory())             // If the file doesn't exist or is a directory
-  {
-    Serial.println("- empty file or failed to open file"); // Debug message
-    return String();                                       // Return an empty string
-  }
-  Serial.println("- read from file:"); // Debug message
-  String fileContent;                  // Create a string to hold the content of the file
-  while (file.available())             // While there is data to read
-  {
-    fileContent += String((char)file.read()); // Add the character to the string
-  }
-  file.close();                // Close the file
-  Serial.println(fileContent); // Debug message
-  return fileContent;          // Return the content of the file
-}
-
-void writeFile(fs::FS &fs, const char *path, const char *message) // write to a file
-{
-  Serial.printf("Writing file: %s\r\n", path); // Debug message
-  File file = fs.open(path, "w");              // Open the file
-  if (!file)                                   // If the file doesn't exist
-  {
-    Serial.println("- failed to open file for writing"); // Debug message
-    return;
-  }
-  if (file.print(message)) // Write the message to the file
-  {
-    Serial.println("- file written"); // Debug message
-  }
-  else
-  {
-    Serial.println("- write failed"); // Debug message
-  }
-  file.close(); // Close the file
-}
-
 void setup()
 {
   Serial.begin(9600); // Start the serial communication
@@ -83,7 +44,7 @@ void setup()
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Initialize the OLED-Display
   display.display();                         // display startup animation
   delay(2000);
-  if (SPIFFS.begin()) // Mount the file system
+  if (utilities.init()) // Mount the file system
   {
     Serial.println("SPIFFS mounted"); // Debug message
   }
@@ -110,7 +71,7 @@ void setup()
   display.setCursor(0, 0);
   display.display();
 
-  String tokenString = readFile(SPIFFS, "/blynkToken.txt"); // Read the token from the file
+  String tokenString = utilities.readFile(SPIFFS, "/blynkToken.txt"); // Read the token from the file
   if (!tokenString.isEmpty())
   {
     blynkToken.setValue(tokenString.c_str(), 33); // If a token was found, set the token to the html-page input
@@ -119,7 +80,7 @@ void setup()
 
   // Also accessible at IP 192.168.4.1
   wifiManager.autoConnect("Eugen");                            // Setup the name of the hotspot and connect to wifi
-  writeFile(SPIFFS, "/blynkToken.txt", blynkToken.getValue()); // Write the blynk token to the filesystem
+  utilities.writeFile(SPIFFS, "/blynkToken.txt", blynkToken.getValue()); // Write the blynk token to the filesystem
 
   Blynk.config(blynkToken.getValue(), "iot.informatik.uni-oldenburg.de", 8080);
   display.clearDisplay(); // Display the connection status
