@@ -24,7 +24,7 @@ After you created the Blynk project, you have to setup the [controller board](##
 If you have the controller board with the installed firmware, you have to connect it to a power source (Micro-USB or LiPo-Batterie). After the controller booted up, you have to use your smartphone and conenct it to the SSID "Eugen".
 Following the connection, a webpage will open itself, it should look like this:
 
-![WifiConnectionHomePage](WifiSetupHomePage.jpeg)
+![WifiConnectionHomePage](WifiConnectionHomePage.jpeg)
 
 Press on the button that says "Configure WiFi", in order to setup the wifi connection for the controller, and to provide the auth token for the Blynk project.
 Just select your WiFi and type the password and the Blynk token into the dedicated input fields.
