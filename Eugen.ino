@@ -158,8 +158,8 @@ void setup()
   }
 
   display.clearDisplay(); // Display connection status
-  display.println("Verbunden");
   display.setCursor(0, 0);
+  display.println("Verbunden");
   display.display();
   delay(2000);
 
