@@ -1,4 +1,4 @@
-#include <string>
+#include <string> // Library to use strings
 
 #include <BlynkSimpleEsp8266.h> // Library to use the Blynk-App
 
@@ -11,15 +11,19 @@ WiFiManagerParameter blynkToken("blynkToken", "Blynk Token", "", 33); // Paramet
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-#include "Servo.h" // Library to controll the servo
-Servo myservo;     // Create a servo object
+#include "Servo.h"             // Library to controll the servo
+Servo myservo;                 // Create a servo object
+#define SERVO_PIN D7           // Data pin for the servo
+int startAngle = 150;          // Angle at which the servo starts to turn
+int endAngle = 45;             // Angle at which the servo stops to turn
+int tempStartAngle = 0;        // Temporary start angle for calibration
+int tempEndAngle = 0;          // Temporary end angle for calibration
+boolean calibrateStart = true; // If true, the start angle is being calibrated, otherwise the end angle is being calibrated
 
 #include "pitches.h" // Library contains pitches for notes
 
 #include "FileSystemUtilities.h" // Contains methods to use the filesystem
 FileSystemUtilities utilities;   // Create a filesystem utilities object
-
-#define SERVO_PIN D7 // Data pin for the servo
 
 #define BUTTON_PIN D3              // Pin on which to read the button input
 const int SHORT_PRESS_TIME = 3000; // 3 seconds is short press
@@ -36,11 +40,6 @@ Adafruit_SSD1306 display(OLED_RESET);
 unsigned long lastCoffeeTime = 0; // Time when the last coffee was made
 #define COFFEE_TIME_INTERVAL 5000 // Minimum time in milliseconds between two coffees
 boolean calibrationMode = false;  // If true, the controller is in calibration mode
-int startAngle = 150;             // Angle at which the servo starts to turn
-int endAngle = 45;                // Angle at which the servo stops to turn
-int tempStartAngle = 0;           // Temporary start angle for calibration
-int tempEndAngle = 0;             // Temporary end angle for calibration
-boolean calibrateStart = true;    // If true, the start angle is being calibrated, otherwise the end angle is being calibrated
 
 void setup()
 {
@@ -150,13 +149,7 @@ void setup()
 
   myservo.write(startAngle); // Set the servo to the start angle
 
-  display.clearDisplay(); // Display status
-  display.setCursor(0, 0);
-  display.println("Bereit");
-  display.println("einen");
-  display.println("Kaffee");
-  display.println("zu machen");
-  display.display();
+  displayReadyToPour(); // Display the ready to pour message
 }
 
 void loop()
@@ -212,6 +205,15 @@ void pourCoffee()
   myservo.write(startAngle);
   delay(1000);
 
+  displayReadyToPour(); // Display the status that the coffee is ready to pour
+
+  lastCoffeeTime = millis();
+
+  tone(BUZZER_PIN, NOTE_C4, 500); // Play a tone to indicate that the coffee was poured
+}
+
+void displayReadyToPour()
+{
   display.clearDisplay(); // Display that the controller is ready for the next coffee
   display.setCursor(0, 0);
   display.println("Bereit");
@@ -219,10 +221,6 @@ void pourCoffee()
   display.println("Kaffee");
   display.println("zu machen");
   display.display();
-
-  lastCoffeeTime = millis();
-
-  tone(BUZZER_PIN, NOTE_C4, 500); // Play a tone to indicate that the coffee was poured
 }
 
 BLYNK_WRITE(V0) // Coffee button in blynk app is pressed
@@ -244,11 +242,16 @@ BLYNK_WRITE(V1) // Toogle calibration mode
     calibrateStart = true;                                   // Set the calibration mode to start
     Blynk.setProperty(V3, "onLabel", "Accept Start Angle");  // Set the on label of the button to "Accept Start Angle"
     Blynk.setProperty(V3, "offLabel", "Accept Start Angle"); // Set the off label of the button to "Accept Start Angle"
+    display.clearDisplay();
+    display.setCursor(0, 0);
+    display.println("Kalibrierung"); // Display message about calibration mode
+    display.display();
   }
   else
   {
     calibrationMode = false;   // Deactivate calibration mode
     myservo.write(startAngle); // Set the servo to the current start angle value
+    displayReadyToPour();      // Display the status that the coffee is ready to pour
   }
 }
 
