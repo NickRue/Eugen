@@ -31,7 +31,8 @@ unsigned long releasedTime = 0;    // the time the button was released
 #define OLED_RESET 0 // "0" for ESP8266
 Adafruit_SSD1306 display(OLED_RESET);
 
-boolean koffeePouring = false;
+unsigned long lastCoffeeTime = 0; // Time when the last coffee was made
+#define COFFEE_TIME_INTERVAL 5000 // Minimum time in milliseconds between two coffees
 
 void setup()
 {
@@ -172,7 +173,8 @@ void loop()
 
 void pourCoffee()
 {
-  koffeePouring = true;
+  if((millis() - lastCoffeeTime) < COFFEE_TIME_INTERVAL)  // If the last coffee was less than COFFEE_TIME_INTERVAL ago, do nothing
+    return;
 
   display.clearDisplay(); // Display that a coffee is beeing poured
   display.setCursor(0, 0);
@@ -193,7 +195,7 @@ void pourCoffee()
   display.println("zu machen");
   display.display();
 
-  koffeePouring = false;
+  lastCoffeeTime = millis();
 
   tone(BUZZER_PIN, NOTE_C4, 500); // Play a tone to indicate that the coffee was poured
 }
@@ -201,7 +203,7 @@ void pourCoffee()
 BLYNK_WRITE(V0) // Coffee button in blynk app is pressed
 {
   int i = param.asInt(); // Get the value of the button,  1 is pour coffee, 0 is do nothing
-  if (i == 0 || koffeePouring)
+  if (i == 0)
     return;
 
   pourCoffee();
