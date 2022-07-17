@@ -170,10 +170,12 @@ void loop()
       wifiManager.erase();
       display.setCursor(0, 0);
       display.clearDisplay(); // Display connection status
-      display.println("Verbindung");
+      display.println("Verbin-");
+      display.println("dung");
       display.println("geloescht");
-      display.println("Geraet wird"); // Display message about restarting the device
-      display.println("neugestartet");
+      display.println("Geraet"); // Display message about restarting the device
+      display.println("wird neu-");
+      display.println("gestartet");
       display.display();
       delay(5000);
       ESP.restart();
