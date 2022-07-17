@@ -127,7 +127,8 @@ void setup()
   display.println("Verbindung");
   display.println("zu Blynk");
   display.println("wird");
-  display.println("hergestellt");
+  display.println("herge-");
+  display.println("stellt");
   display.display();
   bool connection = Blynk.connect(15000); // Connect to the Blynk server with a timeout of 15 seconds
 
