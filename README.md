@@ -18,7 +18,7 @@ To setup the Blynk project, simply download the blynk app, and scan this QR-Code
 
 ![Blynk-QR-Code](EugenQRCode.jpeg)
 
-After you created the Blynk project, you have to setup the [controller board](###controller)
+After you created the Blynk project, you have to setup the [controller board](#controller)
 
 ### Controller
 If you have the controller board with the installed firmware, you have to connect it to a power source (Micro-USB or LiPo-Batterie). After the controller booted up, you have to use your smartphone and conenct it to the SSID "Eugen".
