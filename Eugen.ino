@@ -101,6 +101,7 @@ void setup()
     display.println("fehlge-");
     display.println("schlagen");
     display.display();
+    delay(2000);
   }
   else
   {
@@ -121,7 +122,8 @@ void setup()
   {
     display.clearDisplay(); // Display the error message
     display.setCursor(0, 0);
-    display.println("Verbindungsfehler");
+    display.println("Verbindungs-");
+    display.println("fehler");
     display.display();
     delay(2000);
     if (Blynk.isTokenInvalid()) // Check if the token was invalid
@@ -137,8 +139,10 @@ void setup()
     wifiManager.erase(); // Erase credentials from the filesystem if the connection failed
     display.clearDisplay();
     display.setCursor(0, 0);
-    display.println("Geraet wird"); // Display message about restarting the device
-    display.println("neugestartet");
+    display.println("Geraet"); // Display message about restarting the device
+    display.println("wird");
+    display.println("neuge-");
+    display.println("startet");
     display.display();
     delay(5000);
     ESP.restart(); // Restart the program, if the connection could not be established
@@ -239,7 +243,7 @@ void displayReadyToPour()
   display.setCursor(0, 0);
   if(!wifi_connected)
     display.println("Offline");
-    
+
   display.println("Bereit");
   display.println("einen");
   display.println("Kaffee");
