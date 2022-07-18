@@ -68,7 +68,7 @@ void setup()
     display.display();
     return; // Stop the program, if the file system could not be mounted
   }
-
+  tone(BUZZER_PIN, NOTE_C4, 100); // Play a note to indicate that the device is starting
   display.clearDisplay(); // Display connection status
   display.setTextColor(WHITE);
   display.setTextSize(1);
