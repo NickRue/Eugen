@@ -4,6 +4,7 @@
 
 #include <WiFiManager.h>                                              // Library to enable wifi controll
 WiFiManager wifiManager;                                              // Create a wifi manager object
+boolean wifi_connected = false;                                        // Variable to check if wifi is connected
 WiFiManagerParameter blynkToken("blynkToken", "Blynk Token", "", 33); // Parameter to set the Blynk Token
 
 #include <SPI.h> // Libraries to controll the LED-Display
@@ -85,11 +86,27 @@ void setup()
     blynkToken.setValue(tokenString.c_str(), 33); // If a token was found, set the token to the html-page input
   }
   wifiManager.addParameter(&blynkToken); // Add the token as parameter to the wifi manager
+  wifiManager.setConfigPortalTimeout(120);   // Set the timeout for the wifi manager to 2 minutes
 
   // Also accessible at IP 192.168.4.1
   wifiManager.autoConnect("Eugen");                                      // Setup the name of the hotspot and connect to wifi
   utilities.writeFile(SPIFFS, "/blynkToken.txt", blynkToken.getValue()); // Write the blynk token to the filesystem
 
+  if(WiFi.status() != WL_CONNECTED)
+  {
+    wifi_connected = false;
+    display.clearDisplay(); // Display the connection status
+    display.setCursor(0, 0);
+    display.println("Verbindung");
+    display.println("fehlge-");
+    display.println("schlagen");
+    display.display();
+    delay(2000);
+  }
+  else
+  {
+    wifi_connected = true;
+  
   Blynk.config(blynkToken.getValue(), "iot.informatik.uni-oldenburg.de", 8080);
   display.clearDisplay(); // Display the connection status
   display.setCursor(0, 0);
@@ -105,7 +122,8 @@ void setup()
   {
     display.clearDisplay(); // Display the error message
     display.setCursor(0, 0);
-    display.println("Verbindungsfehler");
+    display.println("Verbindungs-");
+    display.println("fehler");
     display.display();
     delay(2000);
     if (Blynk.isTokenInvalid()) // Check if the token was invalid
@@ -121,8 +139,10 @@ void setup()
     wifiManager.erase(); // Erase credentials from the filesystem if the connection failed
     display.clearDisplay();
     display.setCursor(0, 0);
-    display.println("Geraet wird"); // Display message about restarting the device
-    display.println("neugestartet");
+    display.println("Geraet"); // Display message about restarting the device
+    display.println("wird");
+    display.println("neuge-");
+    display.println("startet");
     display.display();
     delay(5000);
     ESP.restart(); // Restart the program, if the connection could not be established
@@ -134,6 +154,7 @@ void setup()
   display.println("Verbunden");
   display.display();
   delay(2000);
+  }
 
   String startAngleString = utilities.readFile(SPIFFS, "/startAngle.txt"); // Read the start angle from the file
   if (!startAngleString.isEmpty())
@@ -185,7 +206,8 @@ void loop()
   }
   lastState = currentState;
 
-  Blynk.run(); // Run the Blynk-Client
+  if(wifi_connected)
+    Blynk.run(); // Run the Blynk-Client
 }
 
 void pourCoffee()
@@ -198,6 +220,7 @@ void pourCoffee()
 
   display.clearDisplay(); // Display that a coffee is beeing poured
   display.setCursor(0, 0);
+  display.println("Offline");
   display.println("Mache");
   display.println("Kaffee");
   display.display();
@@ -218,6 +241,9 @@ void displayReadyToPour()
 {
   display.clearDisplay(); // Display that the controller is ready for the next coffee
   display.setCursor(0, 0);
+  if(!wifi_connected)
+    display.println("Offline");
+
   display.println("Bereit");
   display.println("einen");
   display.println("Kaffee");
