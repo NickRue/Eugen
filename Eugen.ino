@@ -76,7 +76,7 @@ void setup()
   display.println("Verbinde");
   display.println("dich mit");
   display.println("der SSID ");
-  display.println("Eugen");
+  display.println("Smartify");
   display.setCursor(0, 0);
   display.display();
 
