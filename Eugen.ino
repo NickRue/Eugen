@@ -14,7 +14,7 @@ WiFiManagerParameter blynkToken("blynkToken", "Blynk Token", "", 33); // Paramet
 
 #include "Servo.h"             // Library to controll the servo
 Servo myservo;                 // Create a servo object
-#define SERVO_PIN D7           // Data pin for the servo
+#define SERVO_PIN D6           // Data pin for the servo
 int startAngle = 150;          // Angle at which the servo starts to turn
 int endAngle = 45;             // Angle at which the servo stops to turn
 int tempStartAngle = 0;        // Temporary start angle for calibration
