@@ -4,7 +4,7 @@
 
 #include <WiFiManager.h>                                              // Library to enable wifi controll
 WiFiManager wifiManager;                                              // Create a wifi manager object
-boolean wifi_connected = false;                                        // Variable to check if wifi is connected
+boolean wifi_connected = false;                                       // Variable to check if wifi is connected
 WiFiManagerParameter blynkToken("blynkToken", "Blynk Token", "", 33); // Parameter to set the Blynk Token
 
 #include <SPI.h> // Libraries to controll the LED-Display
@@ -69,7 +69,7 @@ void setup()
     return; // Stop the program, if the file system could not be mounted
   }
   tone(BUZZER_PIN, NOTE_C4, 100); // Play a note to indicate that the device is starting
-  display.clearDisplay(); // Display connection status
+  display.clearDisplay();         // Display connection status
   display.setTextColor(WHITE);
   display.setTextSize(1);
   display.setCursor(0, 0);
@@ -85,14 +85,14 @@ void setup()
   {
     blynkToken.setValue(tokenString.c_str(), 33); // If a token was found, set the token to the html-page input
   }
-  wifiManager.addParameter(&blynkToken); // Add the token as parameter to the wifi manager
-  wifiManager.setConfigPortalTimeout(120);   // Set the timeout for the wifi manager to 2 minutes
+  wifiManager.addParameter(&blynkToken);   // Add the token as parameter to the wifi manager
+  wifiManager.setConfigPortalTimeout(120); // Set the timeout for the wifi manager to 2 minutes
 
   // Also accessible at IP 192.168.4.1
   wifiManager.autoConnect("Eugen");                                      // Setup the name of the hotspot and connect to wifi
   utilities.writeFile(SPIFFS, "/blynkToken.txt", blynkToken.getValue()); // Write the blynk token to the filesystem
 
-  if(WiFi.status() != WL_CONNECTED)
+  if (WiFi.status() != WL_CONNECTED)
   {
     wifi_connected = false;
     display.clearDisplay(); // Display the connection status
@@ -106,54 +106,54 @@ void setup()
   else
   {
     wifi_connected = true;
-  
-  Blynk.config(blynkToken.getValue(), "iot.informatik.uni-oldenburg.de", 8080);
-  display.clearDisplay(); // Display the connection status
-  display.setCursor(0, 0);
-  display.println("Verbindung");
-  display.println("zu Blynk");
-  display.println("wird");
-  display.println("herge-");
-  display.println("stellt");
-  display.display();
-  bool connection = Blynk.connect(15000); // Connect to the Blynk server with a timeout of 15 seconds
 
-  if (!connection) // If the no connection to the Blynk app could be established
-  {
-    display.clearDisplay(); // Display the error message
+    Blynk.config(blynkToken.getValue(), "iot.informatik.uni-oldenburg.de", 8080);
+    display.clearDisplay(); // Display the connection status
     display.setCursor(0, 0);
-    display.println("Verbindungs-");
-    display.println("fehler");
+    display.println("Verbindung");
+    display.println("zu Blynk");
+    display.println("wird");
+    display.println("herge-");
+    display.println("stellt");
     display.display();
-    delay(2000);
-    if (Blynk.isTokenInvalid()) // Check if the token was invalid
+    bool connection = Blynk.connect(15000); // Connect to the Blynk server with a timeout of 15 seconds
+
+    if (!connection) // If the no connection to the Blynk app could be established
     {
-      Serial.println("Invalid token, please check your Blynk Token"); // Debug message
-      display.clearDisplay();                                         // Display connection status
+      display.clearDisplay(); // Display the error message
       display.setCursor(0, 0);
-      display.println("Token");
-      display.println("ungueltig");
+      display.println("Verbindungs-");
+      display.println("fehler");
+      display.display();
+      delay(2000);
+      if (Blynk.isTokenInvalid()) // Check if the token was invalid
+      {
+        Serial.println("Invalid token, please check your Blynk Token"); // Debug message
+        display.clearDisplay();                                         // Display connection status
+        display.setCursor(0, 0);
+        display.println("Token");
+        display.println("ungueltig");
+        display.display();
+        delay(5000);
+      }
+      wifiManager.erase(); // Erase credentials from the filesystem if the connection failed
+      display.clearDisplay();
+      display.setCursor(0, 0);
+      display.println("Geraet"); // Display message about restarting the device
+      display.println("wird");
+      display.println("neuge-");
+      display.println("startet");
       display.display();
       delay(5000);
+      ESP.restart(); // Restart the program, if the connection could not be established
     }
-    wifiManager.erase(); // Erase credentials from the filesystem if the connection failed
-    display.clearDisplay();
-    display.setCursor(0, 0);
-    display.println("Geraet"); // Display message about restarting the device
-    display.println("wird");
-    display.println("neuge-");
-    display.println("startet");
-    display.display();
-    delay(5000);
-    ESP.restart(); // Restart the program, if the connection could not be established
-  }
-  delay(2000);
+    delay(2000);
 
-  display.clearDisplay(); // Display connection status
-  display.setCursor(0, 0);
-  display.println("Verbunden");
-  display.display();
-  delay(2000);
+    display.clearDisplay(); // Display connection status
+    display.setCursor(0, 0);
+    display.println("Verbunden");
+    display.display();
+    delay(2000);
   }
 
   String startAngleString = utilities.readFile(SPIFFS, "/startAngle.txt"); // Read the start angle from the file
@@ -206,7 +206,7 @@ void loop()
   }
   lastState = currentState;
 
-  if(wifi_connected)
+  if (wifi_connected)
     Blynk.run(); // Run the Blynk-Client
 }
 
@@ -230,6 +230,15 @@ void pourCoffee()
   myservo.write(startAngle);
   delay(1000);
 
+  display.clearDisplay(); // Display status message
+  display.setCursor(0, 0);
+  display.println("Noch");
+  display.println("nicht");
+  display.println("bereit");
+  display.display();
+  
+  delay(5000);
+
   displayReadyToPour(); // Display the status that the coffee is ready to pour
 
   lastCoffeeTime = millis();
@@ -241,7 +250,7 @@ void displayReadyToPour()
 {
   display.clearDisplay(); // Display that the controller is ready for the next coffee
   display.setCursor(0, 0);
-  if(!wifi_connected)
+  if (!wifi_connected)
     display.println("Offline");
 
   display.println("Bereit");
