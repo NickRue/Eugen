@@ -89,7 +89,7 @@ void setup()
   wifiManager.setConfigPortalTimeout(120); // Set the timeout for the wifi manager to 2 minutes
 
   // Also accessible at IP 192.168.4.1
-  wifiManager.autoConnect("Eugen");                                      // Setup the name of the hotspot and connect to wifi
+  wifiManager.autoConnect("Smartify");                                   // Setup the name of the hotspot and connect to wifi
   utilities.writeFile(SPIFFS, "/blynkToken.txt", blynkToken.getValue()); // Write the blynk token to the filesystem
 
   if (WiFi.status() != WL_CONNECTED)
@@ -236,7 +236,7 @@ void pourCoffee()
   display.println("nicht");
   display.println("bereit");
   display.display();
-  
+
   delay(5000);
 
   displayReadyToPour(); // Display the status that the coffee is ready to pour
